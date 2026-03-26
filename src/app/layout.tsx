@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Auth",
-  description: "Supabase 登录与 MFA",
+  title: "认证",
+  description: "使用 Supabase 的登录与多因素认证",
 };
 
 export default function RootLayout({

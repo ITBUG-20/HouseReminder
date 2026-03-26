@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // 参考用前端 UI 草稿目录，不参与 lint
+    "b_fjCl8L7fxzG-1774504120990/**",
   ]),
 ]);
 

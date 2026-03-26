@@ -12,6 +12,9 @@ export async function POST(req: Request) {
   const manager = new NotificationManager();
   await manager.quickNotify(content);
 
-  return NextResponse.json({ ok: true });
+  return NextResponse.json({
+    ok: true,
+    provider: manager.getProviderType(),
+  });
 }
 

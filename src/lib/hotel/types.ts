@@ -10,5 +10,6 @@ export type MonitoringTaskRow = {
   status: MonitoringTaskStatus;
   is_active: boolean;
   last_check: string | null; // timestamptz
+  source_url?: string | null;
 };
 

@@ -2,9 +2,14 @@
 
 import { createClient } from "@/src/utils/supabase/client";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 
-export function DashboardSignOut() {
+export function DashboardSignOut(props?: {
+  label?: string;
+  className?: string;
+  children?: ReactNode;
+  "aria-label"?: string;
+}) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
@@ -44,9 +49,19 @@ export function DashboardSignOut() {
       type="button"
       onClick={signOut}
       disabled={loading}
-      className="w-fit rounded-lg border border-zinc-300 px-4 py-2 text-sm hover:bg-zinc-100 disabled:opacity-60 dark:border-zinc-600 dark:hover:bg-zinc-800"
+      aria-label={props?.["aria-label"]}
+      className={
+        props?.className ??
+        "w-fit rounded-lg p-1 text-[#c5c0b8] hover:text-[#8a8278] hover:bg-black/5 disabled:opacity-50 transition-colors"
+      }
     >
-      {loading ? "退出中…" : "退出登录"}
+      {loading ? (
+        "退出中…"
+      ) : props?.children ? (
+        props.children
+      ) : (
+        props?.label ?? "退出登录"
+      )}
     </button>
   );
 }

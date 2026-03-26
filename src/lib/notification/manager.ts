@@ -29,9 +29,15 @@ function formatTime(date: Date): string {
 
 export class NotificationManager {
   private readonly provider: INotificationProvider;
+  private readonly providerType: NotificationType;
 
   constructor(type?: NotificationType) {
-    const resolvedType = type ?? (getEnv("NOTIFICATION_TYPE") as NotificationType | undefined);
+    const envTypeRaw = getEnv("NOTIFICATION_TYPE");
+    const envTypeNormalized = envTypeRaw?.trim().toUpperCase();
+    const resolvedType = (
+      type ??
+      (envTypeNormalized as NotificationType | undefined)
+    );
 
     if (resolvedType === "WECHAT") {
       const provider = new WechatNotificationProvider({
@@ -41,10 +47,16 @@ export class NotificationManager {
         receiverOpenId: getEnv("WECHAT_RECEIVER_OPENID"),
       });
       this.provider = provider;
+      this.providerType = "WECHAT";
     } else {
       // 默认使用控制台，避免环境变量缺失导致线上失败。
       this.provider = new ConsoleNotificationProvider();
+      this.providerType = "CONSOLE";
     }
+  }
+
+  getProviderType(): NotificationType {
+    return this.providerType;
   }
 
   /**

@@ -1,26 +1,52 @@
-import Link from "next/link";
+"use client"
 
-export default function Home() {
+import { useRouter } from "next/navigation"
+
+export default function HomePage() {
+  const router = useRouter()
+
   return (
-    <div className="flex flex-1 flex-col items-center justify-center gap-6 p-8">
-      <h1 className="text-2xl font-semibold tracking-tight">首页</h1>
-      <p className="max-w-md text-center text-zinc-600 dark:text-zinc-400">
-        使用账号密码登录，并按提示完成 MFA 绑定与验证。
-      </p>
-      <div className="flex gap-4">
-        <Link
-          href="/login"
-          className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
-        >
-          登录
-        </Link>
-        <Link
-          href="/dashboard"
-          className="rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium hover:bg-zinc-100 dark:border-zinc-600 dark:hover:bg-zinc-800"
-        >
-          控制台
-        </Link>
+    <div
+      className="min-h-screen flex items-center justify-center cursor-pointer relative overflow-hidden bg-[#f8f6f3]"
+      onClick={() => router.push("/login")}
+    >
+      {/* Floating particles - 虚无中的微光 */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {[...Array(6)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute w-1 h-1 rounded-full bg-foreground/10 animate-float"
+            style={{
+              left: `${15 + i * 15}%`,
+              top: `${20 + (i % 3) * 25}%`,
+              animationDelay: `${i * 0.8}s`,
+              animationDuration: `${5 + i}s`,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Center breathing dot - 有生于无 */}
+      <div className="relative flex items-center justify-center">
+        {/* Pulse rings - 涟漪扩散 */}
+        <div className="absolute w-6 h-6 rounded-full bg-foreground/20 animate-pulse-ring" />
+        <div
+          className="absolute w-6 h-6 rounded-full bg-foreground/20 animate-pulse-ring"
+          style={{ animationDelay: "0.6s" }}
+        />
+        <div
+          className="absolute w-6 h-6 rounded-full bg-foreground/20 animate-pulse-ring"
+          style={{ animationDelay: "1.2s" }}
+        />
+
+        {/* Main dot - 生命之源 */}
+        <div className="relative w-4 h-4 rounded-full bg-foreground animate-breathe shadow-[0_0_20px_rgba(80,70,60,0.2)]" />
+      </div>
+
+      {/* Hint text - only visible on hover */}
+      <div className="absolute bottom-12 left-1/2 -translate-x-1/2 opacity-0 hover:opacity-100 transition-opacity duration-1000">
+        <p className="text-muted-foreground/50 text-xs tracking-[0.3em]">进入</p>
       </div>
     </div>
-  );
+  )
 }

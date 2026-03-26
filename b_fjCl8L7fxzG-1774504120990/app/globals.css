@@ -1,0 +1,195 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* 莫兰迪配色 - 柔和低饱和度 */
+  --background: #f8f6f3;
+  --foreground: #5c5650;
+  --card: #f3f0ec;
+  --card-foreground: #5c5650;
+  --popover: #faf8f6;
+  --popover-foreground: #5c5650;
+  --primary: #8a7f72;
+  --primary-foreground: #faf8f6;
+  --secondary: #ebe8e3;
+  --secondary-foreground: #6b635a;
+  --muted: #eae7e2;
+  --muted-foreground: #8a8278;
+  --accent: #e5e1db;
+  --accent-foreground: #5c5650;
+  --destructive: #c9a9a0;
+  --destructive-foreground: #faf8f6;
+  --border: #ddd9d2;
+  --input: #ebe8e3;
+  --ring: #a89d90;
+  --radius: 1rem;
+  
+  /* Glass effect - 莫兰迪风格 */
+  --glass-bg: rgba(250, 248, 246, 0.65);
+  --glass-border: rgba(140, 130, 115, 0.15);
+  --glass-shadow: rgba(90, 80, 70, 0.06);
+  
+  /* Status colors - 莫兰迪绿与莫兰迪红 */
+  --available: #7fa88a;
+  --unavailable: #c9a9a0;
+}
+
+.dark {
+  --background: #f8f6f3;
+  --foreground: #5c5650;
+}
+
+@theme inline {
+  --font-sans: 'Geist', 'Geist Fallback';
+  --font-mono: 'Geist Mono', 'Geist Mono Fallback';
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html, body {
+    background-color: #f8f6f3 !important;
+    color: #5c5650;
+  }
+}
+
+/* Breathing animation - 呼吸动画 */
+@keyframes breathe {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+}
+
+@keyframes breathe-glow-green {
+  0%, 100% {
+    box-shadow: 
+      0 0 4px #7fa88a,
+      0 0 8px rgba(127, 168, 138, 0.4);
+    opacity: 0.65;
+  }
+  50% {
+    box-shadow: 
+      0 0 8px #7fa88a,
+      0 0 16px #7fa88a,
+      0 0 24px rgba(127, 168, 138, 0.4);
+    opacity: 1;
+  }
+}
+
+@keyframes breathe-glow-red {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.animate-breathe {
+  animation: breathe 4s ease-in-out infinite;
+}
+
+.animate-breathe-glow {
+  animation: breathe 4s ease-in-out infinite, breathe-glow-green 4s ease-in-out infinite;
+}
+
+.animate-pulse-ring {
+  animation: pulse-ring 2.5s ease-out infinite;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.6s ease-out forwards;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Glass morphism - 莫兰迪液体玻璃 */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px) saturate(130%);
+  -webkit-backdrop-filter: blur(20px) saturate(130%);
+  border: 1px solid var(--glass-border);
+  box-shadow: 
+    0 4px 20px var(--glass-shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.glass-subtle {
+  background: rgba(243, 240, 236, 0.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(140, 130, 115, 0.12);
+}
+
+/* Status indicator breathing */
+.status-available {
+  animation: breathe-glow-green 2.5s ease-in-out infinite;
+}
+
+.status-unavailable {
+  animation: breathe-glow-red 3s ease-in-out infinite;
+}

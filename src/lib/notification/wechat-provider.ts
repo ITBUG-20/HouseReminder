@@ -107,6 +107,13 @@ export class WechatNotificationProvider
         return;
       }
 
+      const receiverOpenIds = this.receiverOpenId
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
+
+      if (!receiverOpenIds.length) return;
+
       const url = new URL(
         "https://api.weixin.qq.com/cgi-bin/message/template/send"
       );
@@ -114,43 +121,45 @@ export class WechatNotificationProvider
 
       // 这里的 `data` 字段名需要与微信模板字段（keyword1/2/...）保持一致。
       // 目前使用：keyword1=content, keyword2=time, first=project
-      const body = {
-        touser: this.receiverOpenId,
-        template_id: this.templateId,
-        url: "",
-        topcolor: "#000000",
-        data: {
-          first: { value: payload.project },
-          keyword1: { value: payload.content },
-          keyword2: { value: payload.time },
-        },
-      };
+      for (const openid of receiverOpenIds) {
+        const body = {
+          touser: openid,
+          template_id: this.templateId,
+          url: "",
+          topcolor: "#000000",
+          data: {
+            first: { value: payload.project },
+            keyword1: { value: payload.content },
+            keyword2: { value: payload.time },
+          },
+        };
 
-      const resp = await fetchWithTimeout(
-        url.toString(),
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
-        },
-        8000
-      ).catch((err) => {
-        console.error("[Notification][Wechat] send timeout/error:", err);
-        return null;
-      });
+        const resp = await fetchWithTimeout(
+          url.toString(),
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+          },
+          8000
+        ).catch((err) => {
+          console.error("[Notification][Wechat] send timeout/error:", err);
+          return null;
+        });
 
-      if (!resp) return;
+        if (!resp) continue;
 
-      const json = (await resp.json().catch(() => null)) as
-        | WechatSendResponse
-        | null;
+        const json = (await resp.json().catch(() => null)) as
+          | WechatSendResponse
+          | null;
 
-      if (typeof json?.errcode !== "undefined") {
-        console.error(
-          "[Notification][Wechat] send failed:",
-          json?.errcode,
-          json?.errmsg
-        );
+        if (typeof json?.errcode !== "undefined" && json?.errcode !== 0) {
+          console.error(
+            "[Notification][Wechat] send failed:",
+            json?.errcode,
+            json?.errmsg
+          );
+        }
       }
     } catch (err) {
       // 不抛错，确保通知失败不会影响主流程。

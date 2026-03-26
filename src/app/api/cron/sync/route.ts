@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { UniversalMonitor } from "@/src/lib/hotel/universal-monitor";
+import { scanToyokoInnSeoul } from "@/src/lib/toyoko/scan-toyoko-inn-seoul";
 
 export const runtime = "nodejs";
 
@@ -16,8 +16,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
-  const monitor = new UniversalMonitor();
-  const result = await monitor.startScan();
+  const result = await scanToyokoInnSeoul({ sendNotifications: true });
 
   return NextResponse.json({ ok: true, result });
 }
