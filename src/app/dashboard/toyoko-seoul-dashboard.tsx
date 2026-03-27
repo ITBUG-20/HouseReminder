@@ -48,7 +48,7 @@ export function ToyokoSeoulDashboard() {
     void loadHotels();
     const id = setInterval(() => {
       void loadHotels();
-    }, 30000);
+    }, 10 * 60 * 1000);
     return () => clearInterval(id);
   }, []);
 

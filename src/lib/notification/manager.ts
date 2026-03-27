@@ -3,9 +3,10 @@ import type {
   NotificationPayload,
 } from "./interface";
 import { ConsoleNotificationProvider } from "./console-provider";
+import { EmailNotificationProvider } from "./email-provider";
 import { WechatNotificationProvider } from "./wechat-provider";
 
-type NotificationType = "WECHAT" | "CONSOLE";
+type NotificationType = "EMAIL" | "WECHAT" | "CONSOLE";
 
 function getEnv(key: string): string | undefined {
   return process.env[key];
@@ -39,7 +40,14 @@ export class NotificationManager {
       (envTypeNormalized as NotificationType | undefined)
     );
 
-    if (resolvedType === "WECHAT") {
+    if (resolvedType === "EMAIL") {
+      const provider = new EmailNotificationProvider({
+        apiKey: getEnv("RESEND_API_KEY"),
+        from: getEnv("RESEND_FROM"),
+      });
+      this.provider = provider;
+      this.providerType = "EMAIL";
+    } else if (resolvedType === "WECHAT") {
       const provider = new WechatNotificationProvider({
         appId: getEnv("WECHAT_APP_ID"),
         appSecret: getEnv("WECHAT_APP_SECRET"),

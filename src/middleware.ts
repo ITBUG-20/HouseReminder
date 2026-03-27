@@ -11,6 +11,8 @@ const SIGN_OUT_PATH = "/auth/sign-out";
 const CRON_SYNC_PATH = "/api/cron/sync";
 const MFA_SETUP_PATH = "/auth/mfa/setup";
 const MFA_VERIFY_PATH = "/auth/mfa/verify";
+const AUTH_CALLBACK_PATH = "/auth/callback";
+const AUTH_REGISTER_API = "/api/auth/register";
 const DASHBOARD_PATH = "/dashboard";
 
 export async function middleware(request: NextRequest) {
@@ -53,7 +55,9 @@ export async function middleware(request: NextRequest) {
     pathname === "/" ||
     pathname === LOGIN_PATH ||
     pathname === SIGN_OUT_PATH ||
-    pathname === CRON_SYNC_PATH;
+    pathname === CRON_SYNC_PATH ||
+    pathname === AUTH_CALLBACK_PATH ||
+    pathname === AUTH_REGISTER_API;
 
   if (!user) {
     if (!isPublicPath) {
